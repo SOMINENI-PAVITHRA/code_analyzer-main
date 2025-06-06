@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="min-h-screen px-4 py-12 max-w-5xl mx-auto">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold gradient-heading">
+            🔍 Analysis Report
+        </h1>
+        <p class="text-gray-400 mt-2">Powered by Gemini Pro</p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6">
+        <!-- Code Display -->
+        <div class="glass-card p-6 rounded-2xl border border-gray-700/50">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-cyan-400 flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                    </svg>
+                    Your Code
+                </h2>
+                <button onclick="navigator.clipboard.writeText(`{{ code }}`)" 
+                        class="px-4 py-2 bg-gray-700 hover:bg-cyan-600 rounded-lg transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    Copy
+                </button>
+            </div>
+            <pre class="whitespace-pre-wrap code-bg p-4 rounded-xl font-mono text-sm text-cyan-100 overflow-x-auto">{{ code }}</pre>
+        </div>
+
+        <!-- Analysis Results -->
+        <div class="space-y-6">
+            <!-- Issues Card -->
+            {% if analysis.issues %}
+            <div class="glass-card p-6 rounded-2xl border border-red-800/50">
+                <h3 class="text-xl font-bold text-red-400 mb-4 flex items-center gap-2">
+                    ⚠️ Issues Found
+                </h3>
+                <ul class="space-y-3 text-red-200">
+                    {% for issue in analysis.issues %}
+                    <li class="flex items-start gap-2">
+                        <span class="text-red-400">•</span>
+                        <span class="flex-1">{{ issue }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <!-- Fixes Card -->
+            {% if analysis.fixes %}
+            <div class="glass-card p-6 rounded-2xl border border-green-800/50">
+                <h3 class="text-xl font-bold text-green-400 mb-4 flex items-center gap-2">
+                    🛠 Recommended Fixes
+                </h3>
+                <ul class="space-y-3 text-green-200">
+                    {% for fix in analysis.fixes %}
+                    <li class="flex items-start gap-2">
+                        <span class="text-green-400">•</span>
+                        <span class="flex-1">{{ fix }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <!-- Resources Card -->
+            {% if analysis.resources %}
+            <div class="glass-card p-6 rounded-2xl border border-blue-800/50">
+                <h3 class="text-xl font-bold text-blue-400 mb-4 flex items-center gap-2">
+                    📚 Learning Resources
+                </h3>
+                <ul class="space-y-2 text-blue-200">
+                    {% for resource in analysis.resources %}
+                    <li>
+                        <a href="{{ resource|extract_resource_url }}" 
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="hover:text-blue-400 transition-colors flex items-center gap-2 group">
+                            <span class="group-hover:translate-x-1 transition-transform">
+                                🔗
+                            </span>
+                            <span class="border-b border-transparent group-hover:border-blue-400">
+                                {{ resource|extract_resource_text }}
+                            </span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <!-- Action Button -->
+            <a href="/" 
+               class="inline-block w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-6 rounded-xl transition-all hover-glow text-center">
+                🧑💻 Analyze New Code
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
