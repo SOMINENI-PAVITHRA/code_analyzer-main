@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 from .forms import CodeSubmissionForm
 
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-pro")
+genai.configure(api_key="AIzaSyCOFLWIJMpNLKhhmz1eEh9xiip062cu6Go")
+model = genai.GenerativeModel("gemini-2.5-pro")
 
 
 def parse_gemini_response(response_text):
